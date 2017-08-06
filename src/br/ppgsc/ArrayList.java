@@ -15,14 +15,14 @@ public class ArrayList<E> implements List<E> {
 
     /** @param arraySize the maximum number of elements of the list
      */
-    public ArrayList(int arraySize) {
+    ArrayList(int arraySize) {
         this.arraySize = arraySize;
         listLength = 0;
         currentPosition = 0;
         listArray = (E[])new Object[arraySize];
     }
 
-    public ArrayList() {
+    ArrayList() {
         this(DEFAULT_SIZE);
     }
 
@@ -38,9 +38,7 @@ public class ArrayList<E> implements List<E> {
         assert listLength <= arraySize : "The length of the list should never be greater than the size of the array";
         if (listLength == arraySize) throw new Exception("Array size limit exceeded. Could not insert a new element");
         // Shift up the elements after the current position
-        for (int i = listLength; i>currentPosition; i--) {
-            listArray[i] = listArray[i-1];
-        }
+        System.arraycopy(listArray, currentPosition, listArray, currentPosition + 1, listLength - currentPosition);
         listArray[currentPosition] = element;
         listLength++;
     }
@@ -56,9 +54,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public E remove() {
         E element = listArray[currentPosition];
-        for (int i=currentPosition; i<listLength; i++) {
-            listArray[i]=listArray[i+1];
-        }
+        System.arraycopy(listArray, currentPosition + 1, listArray, currentPosition, listLength - currentPosition);
         listLength--;
         return element;
     }
@@ -106,6 +102,20 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public String toString() {
-        return Arrays.asList(listArray).toString();
+        return Arrays.asList(listArray).subList(0, listLength).toString();
+    }
+
+    @Override
+    public int binarySearch(E element, Greater<E> greater) {
+        int leftBound=-1;
+        int rightBound=listLength;
+        while (leftBound+1 != rightBound) {
+            int index = (leftBound+rightBound)/2;
+            if (listArray[index].equals(element)) return index;
+            if (greater.compare(listArray[index], element)) rightBound = index;
+            else leftBound = index;
+        }
+        return -1;
     }
 }
+
