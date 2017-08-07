@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class ArrayList<E> implements List<E> {
 
     private static final int DEFAULT_SIZE = 1024;
+    private static final boolean BINARY_SEARCH_USING_RECURSION = false;
     private int arraySize; // fixed size of the array
     private int listLength;
     private int currentPosition;
@@ -107,6 +108,11 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int binarySearch(E element, Greater<E> greater) {
+        if (BINARY_SEARCH_USING_RECURSION) return recursiveBinSearch(element, greater, -1, listLength);
+        else return loopedBinSearch(element, greater);
+    }
+
+    private int loopedBinSearch(E element, Greater<E> greater) {
         int leftBound=-1;
         int rightBound=listLength;
         while (leftBound+1 != rightBound) {
@@ -116,6 +122,18 @@ public class ArrayList<E> implements List<E> {
             else leftBound = index;
         }
         return -1;
+    }
+
+    private int recursiveBinSearch(E element, Greater<E> greater, int leftBound, int rightBound) {
+        int index = (leftBound+rightBound)/2;
+        if (listArray[index].equals(element)) return index;
+        if (greater.compare(listArray[index], element)) {
+            if ((leftBound+index)/2 == index) return -1;
+            else return recursiveBinSearch(element, greater, leftBound, index);
+        } else {
+            if ((index+rightBound)/2 == index) return -1;
+            else return recursiveBinSearch(element, greater, index, rightBound);
+        }
     }
 }
 

@@ -63,7 +63,7 @@ public interface List<E> {
      */
     E getElement();
 
-    /** Apply binary search to find and element in the list
+    /** Apply binary search to find and element in the list. The List must be sorted from lowest to highest
      * @return the position of an element in the and sorted list using binary search algorithm. Returns -1 if the
      * element was not found
      * @param element the element to be searched

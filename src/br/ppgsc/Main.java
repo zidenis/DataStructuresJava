@@ -16,7 +16,7 @@ public class Main {
             names.append("Gulliver");
             names.append("Hugo");
             System.out.println(names);
-            int position = names.binarySearch("Goia", (f, s) -> f.compareTo(s) > 0);
+            int position = names.binarySearch("Gulliver", (f, s) -> f.compareTo(s) > 0);
             if (position >= 0) {
                 names.moveToPosition(position);
                 System.out.println("Lista[" + position + "] = " + names.getElement());
